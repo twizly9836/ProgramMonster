@@ -8,7 +8,11 @@ public class Main {
         String monster = "\uD83E\uDDDF";
         String castle = "\uD83C\uDFF0";
 
+        String leftBlock = " | ";
+        String rightBlock = " | ";
+        String wall = " + —— + —— + —— + —— + —— + ";
         int sizeBoard = 5;
+        String[]  board = new String[sizeBoard * sizeBoard];
         int castleY = 1;
         int castleX = 1 + random.nextInt(sizeBoard);
 
@@ -55,9 +59,18 @@ public class Main {
 
                     for (int y = 1; y <= sizeBoard; y++) {
                         for (int x = 1; x <= sizeBoard; x++) {
+                            board[(y-1) * sizeBoard + x - 1] = "      ";
+
+                            if (personY == y && personX == x) {
+                            } else if (castleX == x && castleY == y) {
+                            }else {
+                            System.out.print("");
+                            }
 
                         }
+                        System.out.println(rightBlock);
                     }
+                    System.out.println(wall);
 
                     /// ////////////////////////////////////////////////////
 
@@ -78,6 +91,7 @@ public class Main {
                         step += 1;
                     } else {
                         System.out.println("Координаты не изменены");
+
                     }
                 }
 
