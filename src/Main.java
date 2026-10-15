@@ -29,8 +29,16 @@ public class Main {
         personY = sizeBoard;
 
 
-        board[(castleY - 1) * sizeBoard + castleX - 1] = castle;
-
+        for (int y = 1; y <= sizeBoard; y++) {
+            for (int x = 1; x <= sizeBoard; x++) {
+                board[y - 1][x - 1] = "  ";
+            }
+        }
+        for (int i = 0; i < countMonster; i++) {
+            board[random.nextInt(sizeBoard - 1)][random.nextInt(sizeBoard)] = monster;
+        }
+        board[castleY - 1][castleX - 1] = castle;
+        board[personY - 1][personX - 1] = person;
 
 
         // \n, \t - спец символ
@@ -64,13 +72,10 @@ public class Main {
                     /*Вывод на экран игрового поля:*/
 
                     for (int y = 1; y <= sizeBoard; y++) {
+                        System.out.println(wall);
                         for (int x = 1; x <= sizeBoard; x++) {
-                            board[y - 1][x - 1] = "  ";
-                            for (int i = 0; i < countMonster; i++) {
-                                board[random.nextInt(sizeBoard - 1)][random.nextInt(sizeBoard)] = monster;
-                            }
-                            board[castleY - 1][castleX - 1] = castle;
-
+                            System.out.print(leftBlock);
+                            System.out.print(board[y - 1][x - 1]);
                         }
                         System.out.println(rightBlock);
                     }
@@ -88,35 +93,27 @@ public class Main {
                     if (x != personX && y != personY) {
                         System.out.println("Некорректный ход");
                     } else if (Math.abs(x - personX) == 1 || Math.abs(y - personY) == 1) {
-                        personX = x;
-                        personY = y;
-                        step += 1;
-                        System.out.println("Ход корректный; Новые координаты: " +
-                                personX + ", " + personY + "\nХод номер: " + step);
+                        if (board[y - 1][x - 1].equals("  ")) {
+                            board[personY - 1][personX - 1] = "  ";
+
+                            personX = x;
+                            personY = y;
+                            step++;
+                            board[personY - 1][personX - 1] = person;
+                            System.out.println(
+                                    "Ход корректный; новые координаты: "
+                                            + personX + ", " + personY
+                                            + "\nХод номер: " + step
+                            );
+                        } else if (board[y - 1][x - 1].equals(castle)) {
+                            System.out.println("Вы прошли игру!");
+                            break;
+                        } else {
+                            System.out.println("Решите задачу.");
+                        }
                     } else {
-                        System.out.println("Координаты не изменены");
-
+                        System.out.println("Кординаты не изменены");
                     }
-                    if (board[(y - 1) * sizeBoard + x - 1].equals("     ")) {
-                        board[(personY - 1) * sizeBoard + personX - 1] = "  ";
-
-
-                        personX = x;
-                        personY = y;
-                        step++;
-
-                        System.out.println(
-                                "Ход корректный; новые координаты: "
-                                        + personX + ", " + personY
-                                        + "\nХод номер: " + step
-                        );
-                    } else if (board[(y - 1) * sizeBoard + x - 1].equals(castle)) {
-                        System.out.println("Вы прошли игру!");
-                        break;
-                    } else {
-                        System.out.println("Решите задачу.");
-                    }
-
 
                     if (personLive <= 0) {
                         break;
@@ -126,7 +123,6 @@ public class Main {
                 if (personLive <= 0) {
                     System.out.println("Закончились жизни. Итог: ...");
                 }
-
 
                 break;
             case "НЕТ":
