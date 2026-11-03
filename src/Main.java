@@ -5,13 +5,7 @@ public class Main {
     public static void main(String[] args) {
         Random random = new Random();
 
-        //String person = "\uD83E\uDDD9";
-        String monster = "\uD83E\uDDDF";
         String castle = "\uD83C\uDFF0";
-
-        String leftBlock = " | ";
-        String rightBlock = " | ";
-        String wall = " + —— + —— + —— + —— + —— + ";
         int sizeBoard = 5;
         Person person = new Person(sizeBoard);
         String[][] board = new String[sizeBoard][sizeBoard];
@@ -21,8 +15,6 @@ public class Main {
 
 
 
-
-        int personLive = 3;
 
 
         int step = 0;
@@ -34,25 +26,33 @@ public class Main {
 
             }
         }
-        for (int i = 0; i < countMonster; i++) {
-            board[random.nextInt(sizeBoard - 1)][random.nextInt(sizeBoard)] = monster;
-        }
+
         board[castleY - 1][castleX - 1] = castle;
         board[person.getY() - 1][person.getX() - 1] = person.getImage();
 
+        Monster[] monsters = new Monster[countMonster];
+        int count = 0;
 
-        // \n, \t - спец символ
-        String gamingField = "+ —— + —— + —— + —— + —— +\n"
-                + "|    |    |    |    |    |\n"
-                + "+ —— + —— + —— + —— + —— +\n"
-                + "|    |    |    |    |    |\n"
-                + "+ —— + —— + —— + —— + —— +\n"
-                + "|    |    | " + monster + " |    |    |\n"
-                + "+ —— + —— + —— + —— + —— +\n"
-                + "|    |    |    |    |    |\n"
-                + "+ —— + —— + —— + —— + —— +\n"
-                + "| " + person + " |    |    |    |    |\n"
-                + "+ —— + —— + —— + —— + —— +";
+        while (count < countMonster) {
+            Monster monster;
+
+            if (random.nextBoolean()) {
+                monster = new Monster(sizeBoard);
+            } else {
+                monster = new BigMonster(sizeBoard);
+            }
+
+            int row = monster.getY() - 1;
+            int column = monster.getX() - 1;
+
+            if (board[row][column].equals("  ")) {
+                board[row][column] = monster.getImage();
+                monsters[count] = monster;
+                count++;
+            }
+        }
+
+
 
         System.out.println("Привет! Ты готов начать играть в игру? (Напиши: ДА или НЕТ)");
 
@@ -77,15 +77,7 @@ public class Main {
                     /// ////////////////////////////////////////////////////
                     /*Вывод на экран игрового поля:*/
 
-                    for (int y = 1; y <= sizeBoard; y++) {
-                        System.out.println(wall);
-                        for (int x = 1; x <= sizeBoard; x++) {
-                            System.out.print(leftBlock);
-                            System.out.print(board[y - 1][x - 1]);
-                        }
-                        System.out.println(rightBlock);
-                    }
-                    System.out.println(wall);
+                    outputBoard(board, person.getLive());
 
                     /// ////////////////////////////////////////////////////
 
@@ -113,25 +105,29 @@ public class Main {
                             break;
                         } else {
                             System.out.println("Решите задачу.");
-                            if (taskMonster(difficultGame)) {
-                                board[person.getY() - 1][person.getX() - 1] = "  ";
-                                person.move(x, y);
-                                step++;
-                            } else {
-                                personLive--;
+                            for (Monster monster : monsters) {
+                                if (monster.conflictPerson(x, y)) {
+                                    if (monster.taskMonster(difficultGame)) {
+                                        board[person.getY() - 1][person.getX() - 1] = "  ";
+                                        person.move(x, y);
+                                        step++;
+                                    } else {
+                                        person.downLive();
+                                    }
+                                    break;
+                                }
                             }
-
                         }
                     } else {
                         System.out.println("Кординаты не изменены");
                     }
 
-                    if (personLive <= 0) {
+                    if (person.getLive() <= 0) {
                         break;
                     }
                 }
 
-                if (personLive <= 0) {
+                if (person.getLive() <= 0) {
                     System.out.println("Закончились жизни. Итог: ...");
                 }
 
