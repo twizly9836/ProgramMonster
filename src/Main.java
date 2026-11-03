@@ -38,7 +38,7 @@ public class Main {
             board[random.nextInt(sizeBoard - 1)][random.nextInt(sizeBoard)] = monster;
         }
         board[castleY - 1][castleX - 1] = castle;
-        board[person.getY() - 1][person.getX - 1] = person.image;
+        board[person.getY() - 1][person.getX() - 1] = person.getImage();
 
 
         // \n, \t - спец символ
@@ -92,20 +92,20 @@ public class Main {
 
 
                     System.out.println("Введите куда будет ходить персонаж (ход возможен только по вертикали и горизонтали на одну клетку)");
-                    System.out.println("Координаты персонажа - (x: " + person.x + ", y: " + person.y + ")");
+                    System.out.println("Координаты персонажа - (x: " + person.getX() + ", y: " + person.getY() + ")");
 
                     int x = scanner.nextInt();
                     int y = scanner.nextInt();
                     if (person.isMoveCorrect(x, y)) {
                         String next = board[y - 1][x - 1];
                         if (next.equals("  ")) {
-                            board[person.y - 1][person.x - 1] = "  ";
+                            board[person.getY() - 1][person.getX() - 1] = "  ";
 
                             person.move(x, y);
                             step++;
                             System.out.println(
                                     "Ход корректный; новые координаты: "
-                                            + person.x + ", " + person.y
+                                            + person.getX() + ", " + person.getY()
                                             + "\nХод номер: " + step
                             );
                         } else if (next.equals(castle)) {
@@ -114,9 +114,8 @@ public class Main {
                         } else {
                             System.out.println("Решите задачу.");
                             if (taskMonster(difficultGame)) {
-                                board[person.y - 1][person.x - 1] = "  ";
-                                person.x = x;
-                                person.y = y;
+                                board[person.getY() - 1][person.getX() - 1] = "  ";
+                                person.move(x, y);
                                 step++;
                             } else {
                                 personLive--;
