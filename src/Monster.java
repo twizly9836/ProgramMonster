@@ -36,8 +36,8 @@ public class Monster {
             int trueAnswer = a + b;
 
             System.out.println("Реши пример: " + a + " + " + b + " = ?");
-            Scanner scaner = new Scanner(System.in);
-            int answer = scaner.nextInt();
+            Scanner scanner = new Scanner(System.in);
+            int answer = scanner.nextInt();
             if (trueAnswer ==  answer) {
                 System.out.println("Верно! Ты победил монстра");
                 return true;
@@ -45,9 +45,48 @@ public class Monster {
                 System.out.println("Ты проиграл эту битву!");
                 return false;
             }
-        } else {
+        } else if (difficultGame >= 2) {
+            Random random = new Random();
+            String[] question = {
+                    "Сколько будет 1980 * 1980?",
+                    "Сколько планет в Солнечной системе?",
+                    "Сколько будет 1586 + 1725?",
+                    "На какую планету собираеться полететь Илон Макс?",
+                    "Сколько будет 988 * 1488?",
+                    "Сколько дней в високосном году?",
+                    "Сколько будет 13 * 13",
+                    "Как называеться спутник Земли",
+                    "Сколько будет 1000 - 7",
+                    "Сколько градусов в прямом угле?"
+            };
+            String[] trueAnswer = {
+                    "3920400",
+                    "8",
+                    "3311",
+                    "Макс",
+                    "1470144",
+                    "366",
+                    "169",
+                    "Луна",
+                    "993",
+                    "90"
 
-            return false;
-        }
+            };
+
+            int number = random.nextInt(question.length);
+            System.out.println("Монстрик задает вопрос?");
+            System.out.println(question[number]);
+            Scanner scanner = new Scanner(System.in);
+            String answer = scanner.nextLine();
+            if (trueAnswer[number].equals(answer)) {
+                System.out.println("Верно! Ты победил монстра");
+                return true;
+
+            } else {
+                System.out.println("Ты проиграл эту битву!");
+                System.out.println("Правильный ответ: " + trueAnswer[number]);
+                return false;
+            }
+        } return false;
     }
 }
