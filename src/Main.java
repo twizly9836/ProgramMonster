@@ -38,8 +38,10 @@ public class Main {
 
             if (random.nextBoolean()) {
                 monster = new Monster(sizeBoard);
-            } else {
+            } else if (random.nextBoolean()) {
                 monster = new BigMonster(sizeBoard);
+            } else {
+                monster = new SmartMonster(sizeBoard);
             }
 
             int row = monster.getY() - 1;
